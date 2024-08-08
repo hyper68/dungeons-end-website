@@ -19,14 +19,15 @@
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('roblox-username').value;
-            const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659';
+            const apiKey = 'YOUR_BLOXLINK_API_KEY';
 
             fetch(`https://api.blox.link/v1/user/${username}`, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                console.log(data); // Log the full response for debugging
+                if (data.status === 'ok' && data.user) {
                     document.getElementById('user-info').innerHTML = `<h2>Welcome, ${data.user.robloxUsername}</h2><p>Your Roblox ID: ${data.user.robloxId}</p>`;
                 } else {
                     document.getElementById('user-info').innerHTML = `<p>User not found or error occurred.</p>`;
