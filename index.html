@@ -33,7 +33,10 @@
             console.log('Request URL:', url); // Log the request URL for debugging
 
             fetch(url, {
-                headers: { 'Authorization': `Bearer ${apiKey}` },
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
                 console.log('Response Status:', response.status); // Log the response status for debugging
