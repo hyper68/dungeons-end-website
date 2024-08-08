@@ -22,20 +22,21 @@
             const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659';
 
             fetch(`https://api.blox.link/v4/public/discord-to-roblox/${userID}`, {
-                headers: { 'Authorization': apiKey },
+                headers: { 'Authorization': `Bearer ${apiKey}` },
             })
-            .then(response => {
-                return response.json().then(data => ({
-                    status: response.status,
-                    body: data
-                }));
-            })
+            .then(response => response.json().then(data => ({
+                status: response.status,
+                body: data
+            })))
             .then(data => {
                 console.log(data); // Log the full response for debugging
-                if (data.status === 200 && data.body.success && data.body.robloxId) {
-                    document.getElementById('user-info').innerHTML = `<h2>Welcome, Discord User!</h2><p>Your Roblox ID: ${data.body.robloxId}</p>`;
+
+                if (data.status === 200 && data.body.robloxID) {
+                    document.getElementById('user-info').innerHTML = `<h2>Welcome, Discord User!</h2><p>Your Roblox ID: ${data.body.robloxID}</p>`;
+                } else if (data.status === 404) {
+                    document.getElementById('user-info').innerHTML = `<p>User not found.</p>`;
                 } else {
-                    document.getElementById('user-info').innerHTML = `<p>User not found or error occurred.</p>`;
+                    document.getElementById('user-info').innerHTML = `<p>Error occurred: ${data.body.error}</p>`;
                 }
             })
             .catch(error => {
