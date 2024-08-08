@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon's End</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Welcome to Dungeon's End</h1>
+    <form id="login-form">
+        <label for="roblox-username">Enter your Roblox username:</label>
+        <input type="text" id="roblox-username" name="roblox-username" required>
+        <button type="submit">Login</button>
+    </form>
+    <div id="user-info"></div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('roblox-username').value;
+            const apiKey = 'YOUR_BLOXLINK_API_KEY';
+
+            fetch(`https://api.blox.link/v1/user/${username}`, {
+                headers: { 'Authorization': `Bearer ${apiKey}` },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('user-info').innerHTML = `<h2>Welcome, ${data.user.robloxUsername}</h2><p>Your Roblox ID: ${data.user.robloxId}</p>`;
+                } else {
+                    document.getElementById('user-info').innerHTML = `<p>User not found or error occurred.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('user-info').innerHTML = `<p>Error fetching user data. Please try again.</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

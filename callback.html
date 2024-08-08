@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callback</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Logging you in...</h1>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+
+        if (code) {
+            fetch('https://api.blox.link/v1/oauth/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    client_id: 'YOUR_BLOXLINK_CLIENT_ID',
+                    client_secret: 'YOUR_BLOXLINK_CLIENT_SECRET',
+                    code,
+                    redirect_uri: 'https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/callback.html',
+                    grant_type: 'authorization_code',
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access_token) {
+                    fetch('https://api.blox.link/v1/user', {
+                        headers: { Authorization: `Bearer ${data.access_token}` },
+                    })
+                    .then(userResponse => userResponse.json())
+                    .then(userData => {
+                        document.body.innerHTML = `<h1>Welcome, ${userData.username}</h1><p>Your Roblox ID: ${userData.robloxId}</p>`;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.body.innerHTML = '<h1>Login failed. Please try again.</h1>';
+            });
+        } else {
+            document.body.innerHTML = '<h1>No authorization code found.</h1>';
+        }
+    </script>
+</body>
+</html>
