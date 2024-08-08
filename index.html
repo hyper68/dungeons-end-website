@@ -22,15 +22,28 @@
             const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659'; // Your server-specific API key
             const serverID = '1270809573384519690'; // Your Discord server ID
 
-            fetch(`https://api.blox.link/v4/public/guilds/${serverID}/discord-to-roblox/${userID}`, {
+            // Validate userID format
+            if (!/^\d+$/.test(userID)) {
+                document.getElementById('user-info').innerHTML = `<p>Invalid Discord user ID format.</p>`;
+                return;
+            }
+
+            // Construct the request URL
+            const url = `https://api.blox.link/v4/public/guilds/${serverID}/discord-to-roblox/${userID}`;
+            console.log('Request URL:', url); // Log the request URL for debugging
+
+            fetch(url, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
             })
-            .then(response => response.json().then(data => ({
-                status: response.status,
-                body: data
-            })))
+            .then(response => {
+                console.log('Response Status:', response.status); // Log the response status for debugging
+                return response.json().then(data => ({
+                    status: response.status,
+                    body: data
+                }));
+            })
             .then(data => {
-                console.log(data); // Log the full response for debugging
+                console.log('Response Data:', data); // Log the response data for debugging
 
                 if (data.status === 200 && data.body.robloxID) {
                     document.getElementById('user-info').innerHTML = `<h2>Welcome, Discord User!</h2><p>Your Roblox ID: ${data.body.robloxID}</p>`;
@@ -41,7 +54,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error); // Log any errors
                 document.getElementById('user-info').innerHTML = `<p>Error fetching user data. Please try again.</p>`;
             });
         });
