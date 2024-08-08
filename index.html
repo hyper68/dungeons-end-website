@@ -19,9 +19,10 @@
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const userID = document.getElementById('discord-user-id').value;
-            const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659';
+            const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659'; // Your server-specific API key
+            const serverID = '1270809573384519690'; // Your Discord server ID
 
-            fetch(`https://api.blox.link/v4/public/discord-to-roblox/${userID}`, {
+            fetch(`https://api.blox.link/v4/public/guilds/${serverID}/discord-to-roblox/${userID}`, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
             })
             .then(response => response.json().then(data => ({
@@ -34,7 +35,7 @@
                 if (data.status === 200 && data.body.robloxID) {
                     document.getElementById('user-info').innerHTML = `<h2>Welcome, Discord User!</h2><p>Your Roblox ID: ${data.body.robloxID}</p>`;
                 } else if (data.status === 404) {
-                    document.getElementById('user-info').innerHTML = `<p>User not found.</p>`;
+                    document.getElementById('user-info').innerHTML = `<p>User not found or not a server member.</p>`;
                 } else {
                     document.getElementById('user-info').innerHTML = `<p>Error occurred: ${data.body.error}</p>`;
                 }
