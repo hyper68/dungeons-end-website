@@ -9,8 +9,8 @@
 <body>
     <h1>Welcome to Dungeon's End</h1>
     <form id="login-form">
-        <label for="roblox-username">Enter your Roblox username:</label>
-        <input type="text" id="roblox-username" name="roblox-username" required>
+        <label for="discord-user-id">Enter your Discord user ID:</label>
+        <input type="text" id="discord-user-id" name="discord-user-id" required>
         <button type="submit">Login</button>
     </form>
     <div id="user-info"></div>
@@ -18,11 +18,11 @@
     <script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const username = document.getElementById('roblox-username').value;
+            const userID = document.getElementById('discord-user-id').value;
             const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659';
 
-            fetch(`https://api.blox.link/v1/user/${username}`, {
-                headers: { 'Authorization': `Bearer ${apiKey}` },
+            fetch(`https://api.blox.link/v4/public/discord-to-roblox/${userID}`, {
+                headers: { 'Authorization': apiKey },
             })
             .then(response => {
                 return response.json().then(data => ({
@@ -32,8 +32,8 @@
             })
             .then(data => {
                 console.log(data); // Log the full response for debugging
-                if (data.status === 200 && data.body.success && data.body.user) {
-                    document.getElementById('user-info').innerHTML = `<h2>Welcome, ${data.body.user.robloxUsername}</h2><p>Your Roblox ID: ${data.body.user.robloxId}</p>`;
+                if (data.status === 200 && data.body.success && data.body.robloxId) {
+                    document.getElementById('user-info').innerHTML = `<h2>Welcome, Discord User!</h2><p>Your Roblox ID: ${data.body.robloxId}</p>`;
                 } else {
                     document.getElementById('user-info').innerHTML = `<p>User not found or error occurred.</p>`;
                 }
