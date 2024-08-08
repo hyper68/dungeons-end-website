@@ -19,7 +19,7 @@
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('roblox-username').value;
-            const apiKey = 'YOUR_BLOXLINK_API_KEY';
+            const apiKey = '29c25836-bedc-4ae0-9977-7854e4a86659';
 
             fetch(`https://api.blox.link/v1/user/${username}`, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
